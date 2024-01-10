@@ -13,9 +13,14 @@ public class MatrixMultiplication extends UnicastRemoteObject implements MatrixM
     public int[][] forkJoinMultiplication(int[][] _matrix, int _factor, int v_from, int v_to) throws RemoteException {
         System.out.println("Procesing Fork Join multiplication");
         ForkJoinMultiplication forkJoinMultiplication = new ForkJoinMultiplication(_matrix, _factor, v_from, v_to);
-        try (ForkJoinPool forkJoinPool = ForkJoinPool.commonPool()) {
-            forkJoinPool.invoke(forkJoinMultiplication);
+        ForkJoinPool forkJoinPool;
+        try {
+            forkJoinPool = ForkJoinPool.commonPool();
         }
+        catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        forkJoinPool.invoke(forkJoinMultiplication);
         return _matrix;
     }
 
